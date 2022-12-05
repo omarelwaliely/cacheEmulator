@@ -22,7 +22,7 @@ def simulation(line,size,cycle,frame,button):
         messagebox.showerror(message="You did not select a file!",title = "File Error")
     elif line.get() == "" or cycle.get() == "" or size.get() == "":
         messagebox.showerror(message="You did not fill in all the labels!",title = "Empty Label Error")
-    elif not (line.get().isnumeric() or cycle.get().isnumeric() or size.get().isnumeric()):
+    elif not (line.get().isnumeric() and cycle.get().isnumeric() and size.get().isnumeric()):
         messagebox.showerror(message="Please enter valid numbers!", title = "Number Error")
     elif int(cycle.get()) < 1 or int(cycle.get()) > 10:
         messagebox.showerror(message="Please enter a clock cycle between 1 and 10!", title = "Cycle Error")
@@ -36,7 +36,10 @@ def simulation(line,size,cycle,frame,button):
 
 
 def simulatorScreen():
-    return
+    with open(filename) as file:
+        for line in file:
+            print(line,end = '')
+
 
 
 
