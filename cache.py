@@ -44,6 +44,8 @@ def simulation(line,size,cycle,frame,button,root):
 
 
 def simulatorScreen(root):
+    totalHit=0
+    totalMiss= 0
     root.geometry("800x800")
     try:
         index = int(math.log2(totalSize/lineSize))
@@ -70,27 +72,31 @@ def simulatorScreen(root):
         j= 0 #number of accesses
         test.insert(END,"Initial Data")
         for i in range((2**index) -1):
-            test.insert(END,"\nIndex: "+ "{0:08b}".format(int(str(i),10)) + "   Valid bit: " + memory[i].validbit + "  Tag: "+ memory[i].tag + "\n")
+            test.insert(END,"\nIndex: "+ "{0:08b}".format(int("1032134",10)) + "   Valid bit: " + memory[i].validbit + "  Tag: "+ memory[i].tag + "\n")
+        test.insert(END,"\n")
         for line in lines:
             try:
                 curr = "{0:08b}".format(int(line, 16))
                 curr = curr.rjust(32, '0')
-                if(memory[int(curr[tag:(tag+index)],2)].tag == "N/A"):
+                if(memory[int(curr[tag:(tag+index)],2)-1].tag == "N/A"):
                     memory[int(curr[tag:(tag+index)],2) -1].tag = curr[:tag]
                     memory[int(curr[tag:(tag+index)],2) -1].validbit = '1'
-                    print("BBING BONG TIME")
                     missTest = "MISS"
-                elif(memory[int(curr[tag:(tag+index)],2) -1].tag== curr[:tag]):
+                    totalMiss = totalMiss+1
+                elif(memory[int(curr[tag:(tag+index)],2) -1].tag == curr[:tag]):
                     missTest = "HIT"
+                    totalHit = totalHit+1
                 else:
                     memory[int(curr[tag:(tag+index)],2) -1].tag = curr[:tag]
                     memory[int(curr[tag:(tag+index)],2) -1].validbit = '1'
                     missTest = "MISS"
+                    totalMiss = totalMiss+1
                 test.insert(END,"Access #" + str(j+1) + "\n" + missTest)
                 j = j+1
+                print(j)
                 for i in range((2**index) -1):
                     test.insert(END,"\nIndex: "+ "{0:08b}".format(int(str(i),10)) + "   Valid bit: " + memory[i].validbit + "  Tag: "+ memory[i].tag + "\n")
-                test.insert(END,"\nHit Ratio: " +"Miss Ratio: "+ "AMAT: " + "\n\n")
+                test.insert(END,"\nHit Ratio: " + str(round(float(totalHit/j),3)) +"   Miss Ratio: " + str(round(float(totalMiss/j),3)) + "   AMAT: " + str(round(float((totalHit*cycles + totalMiss*(cycles+100))/j),3)) + "\n\n")
             except:
                 messagebox.showerror(message="You inputted the memory wrong!", title = "Incorrect Syntax")
                 return
